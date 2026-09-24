@@ -1,0 +1,45 @@
+[project]
+name = "ret-c2-566"
+version = "0.1.0"
+description = "Retail Product Knowledge Graph Search & Relationship Q&A Agent — AgentCore Template"
+requires-python = ">=3.11"
+# The framework (agenticstar-agentcore) is NOT a public-PyPI dependency; CI
+# installs it from an internal package index. Pinning it here would make
+# `pip install -e .` fail because it is not resolvable from the default index.
+dependencies = [
+    "agenticstar-agentcore[marketplace,openai]==1.0.3",]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==9.0.3",
+    "pytest-cov==5.0.0",
+    "pytest-asyncio==1.4.0",
+    "ruff==0.4.4",
+    "mypy==1.10.0",
+]
+
+[build-system]
+requires = ["setuptools==68.2.2"]
+build-backend = "setuptools.build_meta"
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+
+# The SDK (agenticstar-agentcore) ships no PEP 561 py.typed marker for
+# framework/shared, so every import from it is otherwise flagged
+# import-untyped, which then cascades into "Class cannot subclass ... (has
+# type Any)" for every node/graph in this repo (strict mode's
+# disallow_subclassing_any). Both gaps are on the SDK side, not this
+# template's code; verified safe on the real CI runner (Python 3.11.16).
+[[tool.mypy.overrides]]
+module = ["framework.*", "shared.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "src.*"
+disallow_subclassing_any = false

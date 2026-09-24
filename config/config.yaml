@@ -1,0 +1,10 @@
+# Runtime parameters — loaded by AgentRegistry, passed as Graph(config=...).
+# This is a SEPARATE file from config/agent.yaml (the static manifest): agent.yaml
+# is AgentRegistry's discovery entry point, this file is the agent's own runtime
+# config, keyed by whatever your Graph/node code reads via self.config.get(...).
+
+max_retry: 3
+timeout_s: 30
+
+# No hitl / memory_enabled: this agent has no interrupt() call and no
+# checkpointer-backed subgraph (flat AgentBaseGraph, single-turn Q&A).
